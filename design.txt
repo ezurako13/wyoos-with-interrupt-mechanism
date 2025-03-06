@@ -1,0 +1,51 @@
+Structural Changes:
+•	Handler of systemcalls is separated is from other interrupts and no longer adds hardwareinterruptoffset to interrupt number. Created new assembly function for this.
+•	Tasks in task manager is being now holding as pointers instead of task object. This way, need for no parameter constructor of task have been removed. Also, new tasks need be created with new operator and deleted with delete operator.
+•	Added SyscallType enum to define system call types.
+•	Added TaskState enum to define task states.
+•	pidCounter has been added to task manager to give unique pid to tasks.
+•	added GlobalDescriptorTable to task manager to be able to create new tasks in task manager.
+•	Added an idle task to task manager to add more time between timer interrupts.
+•	Removed unnecessary implementations in kernel such as video mode and driver manager.
+•	Changed implementation of printf a bit to be able to use the window as two columns.
+•	Tasks stores their own pid, parents pid, task state, waiting and waited by pid's, and waiting status location.
+
+New Implementations:
+•	Added system calls to kernel. System calls are now handled in kernel and then passed to task manager to be executed. All of the system calls are triggers an interrupt with the system call number 0x80 and passes paremeters by using registers of cpu.
+• 	2 Priorities has been added to tasks.
+•	2 Stored prioritiesUpdated flag in task manager to check if priorities are updated. Then, it will restart the scheduler with highest priority task.
+•	Added new system calls to kernel. These are:
+	•	Exit: Marks the current process as TERMINATED and calls scheduler to find a new task to run.
+	•	Fork: Creates a new task with the same memory space as the parent task. Copies the parent task's memory space to the child task. Returns the child task's pid to the parent task and 0 to the child task. Continues execution with parent process.
+	•	Execve: Replaces the current process with a new process. Loads the new process to the memory and starts executing it.
+	•	Waitpid: Waits for a specific process to terminate. If the process is already terminated, returns immediately. If not, marks the current process as WAITING and adds the current process to the waited by pid of the process that is waited. Calls scheduler to find a new task to run in this case. Or it can be called with WNOHANG flag to return immediately.
+	•	getpid: Returns the pid of the current process.
+	•	getppid: Returns the pid of the parent process.
+	•	setpriority: Sets the priority of the current process and marks a flag to reset status of scheduller.
+	•	setdynamicpriority: Enables priority of the given process to be changed dynamically.
+
+•	Added a function to Change the priority of a task and sort the task list by priority.
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
+•	
